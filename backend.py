@@ -4,8 +4,15 @@ from datetime import datetime, date
 import os
 import streamlit as st
 
-# --- CONFIGURACIÓN ---
-API_KEY = st.secrets["API_KEY"]
+# --- CONFIGURACIÓN (con diagnóstico) ---
+if "API_KEY" in st.secrets:
+    API_KEY = st.secrets["API_KEY"]
+else:
+    # Esto hará que la app falle, pero con un mensaje nuestro muy claro.
+    st.error("ERROR CRÍTICO: La clave 'API_KEY' no se encontró en los secretos de Streamlit Cloud. Por favor, configúrala en el panel de 'Settings > Secrets'.")
+    # Mostramos qué secretos SÍ encuentra, para depurar.
+    st.warning(f"Secretos encontrados: {st.secrets.to_dict()}")
+    st.stop() # Detiene la ejecución de la app aquí.
 
 # TODAS LAS COMPETICIONES DE FÚTBOL DISPONIBLES EN THE ODDS API
 DEPORTES = [
